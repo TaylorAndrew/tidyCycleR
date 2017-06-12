@@ -165,22 +165,22 @@ ride_summary <- function(df, unit = 'metric') {
 }
 
 
-file_list <- paste0('C:/Users/ataylor9/Downloads/',
-                    c('03_24_17.tcx',
-                      '04_26_17.tcx'))
-rides <- read_ride_data(file_list)
-
-
-kilo_df <- by_kilometer(rides)
-mile_df <- by_mile(rides)
-summaries <- ride_summary(rides)
-summaries_imperial <- ride_summary(rides, 'imperial')
-# Accessing API Calls:
-library(httr)
-library(jsonlite)
-
-token <- GET(url = 'https://ridewithgps.com/api',
-             path = '/users/current.json?email={taylor.andrew.r@gmail.com}&password={eu7m8EHZl0%Ihn}&apikey=testkey1&version=2')
-url  <- "https://ridewithgps.com/api"
-path <- "/USERS/current.JSON"
-raw.result <- GET(url = 'https://ridewithgps.com/api/users/current.json?auth_token={3d699ed410b9ebc91538884af32d0605}')
+# file_list <- paste0('C:/Users/ataylor9/Downloads/',
+#                     c('03_24_17.tcx',
+#                       '04_26_17.tcx'))
+# rides <- read_ride_data(file_list)
+# 
+# 
+# kilo_df <- by_kilometer(rides)
+# mile_df <- by_mile(rides)
+# summaries <- ride_summary(rides)
+# summaries_imperial <- ride_summary(rides, 'imperial')
+# # Accessing API Calls:
+# library(httr)
+# library(jsonlite)
+# 
+# token <- GET(url = 'https://ridewithgps.com/api',
+#              path = '/users/current.json?email={taylor.andrew.r@gmail.com}&password={eu7m8EHZl0%Ihn}&apikey=testkey1&version=2')
+# url  <- "https://ridewithgps.com/api"
+# path <- "/USERS/current.JSON"
+# raw.result <- GET(url = 'https://ridewithgps.com/api/users/current.json?auth_token={3d699ed410b9ebc91538884af32d0605}')
