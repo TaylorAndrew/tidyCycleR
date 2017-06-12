@@ -10,8 +10,10 @@ Encoding: UTF-8
 LazyData: true
 Imports: XML,
     dplyr,
-    anytime
+    anytime,
+    cycleRtools
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr,
                  dplyr
+RoxygenNote: 6.0.1

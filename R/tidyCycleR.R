@@ -1,10 +1,23 @@
-read_ride_data <- function(file_list) {
+#' read_rides
+#'
+#' read_rides will read a list of ride data and bind them into a single rides tibble
+#'
+#' @param file_list list of .tcx, .fit, .pwx, or .srm files
+#'
+#' @return tibble with all ride data
+#' @export
+#'
+#' @examples
+#' ## No run
+#' # ride_list <- c('ride1.tcx', 'ride2.tcx')
+#' # rides <- read_rides(ride_list)
+read_rides <- function(file_list) {
     extensions <- substr(file_list, nchar(file_list)-3, nchar(file_list))
-    if(sum(extensions != '.tcx')>0) return(print('Not all files are .tcx. Only .tcx files are supported'))
+    if(sum(!extensions%in%c('.tcx', '.srm', '.pwx', '.fit')>0)) return(print('Not all files are .tcx. Only .tcx files are supported'))
     get_one_file <- function(file) {
         ride = strsplit(file, '\\/')
         ride = gsub('\\.tcx', '', ride[[1]][length(ride[[1]])])
-        mydf <- cycleRtools::read_tcx(file)
+        mydf <- cycleRtools::read_ride(file)
         mydf <- as_tibble(data.frame(ride = ride, mydf))
         return(mydf)
     }
@@ -12,6 +25,18 @@ read_ride_data <- function(file_list) {
     return(rides)
 }
 
+#' by_mile
+#'
+#' by_mile summarizes all rides data information into a tidy per mile summary tibble
+#'
+#' @param df rides tibble
+#'
+#' @return tibble of summarized rides
+#' @export
+#'
+#' @examples
+#' ## No Run
+#' by_mile(rides)
 by_mile <- function(df) {
     df$mile <- floor(as.numeric(as.character(df$distance.km)) * 0.621371)
     df %>%
@@ -38,6 +63,18 @@ by_mile <- function(df) {
                total_elevation_change_feet, cum_total_elevation_change_feet)
 }
 
+#' by_kilometer
+#'
+#' by_kilometer summarizes all rides data information into a tidy per kilometer summary tibble
+#'
+#' @param df rides tibble
+#'
+#' @return tibble of summarized rides
+#' @export
+#'
+#' @examples
+#' ## No Run
+#' by_kilometer(rides)
 by_kilometer <- function(df) {
     df$kilometer <- floor(as.numeric(as.character(df$distance.km)))
     df %>%
@@ -64,6 +101,19 @@ by_kilometer <- function(df) {
                total_elevation_change_meters, cum_total_elevation_change_meters)
 }
 
+#' ride_summary
+#'
+#' ride_summary provides overall summaries of rides
+#'
+#' @param df rides tibble
+#' @param unit either 'imperial' or 'metric'
+#'
+#' @return tibble
+#' @export
+#'
+#' @examples
+#' ## No run
+#' # ride_summary(rides, 'metric')
 ride_summary <- function(df, unit = 'metric') {
   if(unit == 'metric') {
     df %>%
@@ -165,8 +215,8 @@ ride_summary <- function(df, unit = 'metric') {
 #                     c('03_24_17.tcx',
 #                       '04_26_17.tcx'))
 # rides <- read_ride_data(file_list)
-# 
-# 
+#
+#
 # kilo_df <- by_kilometer(rides)
 # mile_df <- by_mile(rides)
 # summaries <- ride_summary(rides)
@@ -174,7 +224,7 @@ ride_summary <- function(df, unit = 'metric') {
 # # Accessing API Calls:
 # library(httr)
 # library(jsonlite)
-# 
+#
 # token <- GET(url = 'https://ridewithgps.com/api',
 #              path = '/users/current.json?email={taylor.andrew.r@gmail.com}&password={eu7m8EHZl0%Ihn}&apikey=testkey1&version=2')
 # url  <- "https://ridewithgps.com/api"
