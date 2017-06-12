@@ -1,7 +1,3 @@
-library(XML)
-library(anytime)
-library(dplyr)
-
 read_ride_data <- function(file_list) {
     extensions <- substr(file_list, nchar(file_list)-3, nchar(file_list))
     if(sum(extensions != '.tcx')>0) return(print('Not all files are .tcx. Only .tcx files are supported'))
