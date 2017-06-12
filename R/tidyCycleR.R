@@ -18,7 +18,7 @@ read_rides <- function(file_list) {
         ride = strsplit(file, '\\/')
         ride = gsub('\\.tcx', '', ride[[1]][length(ride[[1]])])
         mydf <- cycleRtools::read_ride(file)
-        mydf <- as_tibble(data.frame(ride = ride, mydf))
+        mydf <- tibble::as_tibble(data.frame(ride = ride, mydf))
         return(mydf)
     }
     rides <- do.call(rbind, lapply(file_list, get_one_file))
