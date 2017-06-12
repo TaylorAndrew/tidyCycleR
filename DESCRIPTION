@@ -11,7 +11,8 @@ LazyData: true
 Imports: XML,
     dplyr,
     anytime,
-    cycleRtools
+    cycleRtools,
+    tibble
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr,
