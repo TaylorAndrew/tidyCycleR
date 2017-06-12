@@ -1,11 +1,17 @@
 Package: tidyCycleR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Provides Tidy Analysis of Cycling Data
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Author: Andrew Taylor
+Maintainer: The package maintainer <taylor.andrew.r@gmail.com>
+Description: Import and summarize ride data in a tidy way, and analyze rides.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports: XML,
+    dplyr,
+    anytime
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr,
+                 dplyr
