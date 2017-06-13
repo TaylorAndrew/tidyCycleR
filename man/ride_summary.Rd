@@ -4,10 +4,10 @@
 \alias{ride_summary}
 \title{ride_summary}
 \usage{
-ride_summary(df, unit = "metric")
+ride_summary(data, unit = "metric")
 }
 \arguments{
-\item{df}{rides tibble}
+\item{data}{rides tibble}
 
 \item{unit}{either 'imperial' or 'metric'}
 }

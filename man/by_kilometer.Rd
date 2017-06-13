@@ -4,10 +4,10 @@
 \alias{by_kilometer}
 \title{by_kilometer}
 \usage{
-by_kilometer(df)
+by_kilometer(data)
 }
 \arguments{
-\item{df}{rides tibble}
+\item{data}{rides tibble}
 }
 \value{
 tibble of summarized rides
