@@ -22,14 +22,36 @@ read_rides <- function(file_list) {
         return(mydf)
     }
     rides <- do.call(rbind, lapply(file_list, get_one_file))
+    class(rides) <- c(class(rides), 'rides_df')
     return(rides)
+}
+
+#' remove_pause_data
+#'
+#' @param data rides tibble
+#'
+#' @return filtered tibble with all paused time removed
+#' @export
+#'
+#' @examples
+#' ## No run
+#' # active_ride_df <- remove_pause_data(rides)
+remove_pause_data <- function(data) {
+    data <-
+        data %>%
+        group_by(ride) %>%
+        mutate(delta.distance = distance.km - lag(distance.km)) %>%
+        filter(delta.distance!=0) %>%
+        select(-delta.distance)
+    class(data) <- c(class(data), 'rides_df')
+    data
 }
 
 #' by_mile
 #'
 #' by_mile summarizes all rides data information into a tidy per mile summary tibble
 #'
-#' @param df rides tibble
+#' @param data rides tibble
 #'
 #' @return tibble of summarized rides
 #' @export
@@ -37,9 +59,10 @@ read_rides <- function(file_list) {
 #' @examples
 #' ## No Run
 #' by_mile(rides)
-by_mile <- function(df) {
-    df$mile <- floor(as.numeric(as.character(df$distance.km)) * 0.621371)
-    df %>%
+by_mile <- function(data) {
+    if(!'rides_df'%in%class(data)) return('Must use a rides_df produced via read_rides')
+    data$mile <- floor(as.numeric(as.character(data$distance.km)) * 0.621371)
+    data %>%
         group_by(ride, mile) %>%
         mutate(pace_minutes = as.numeric(timer.min[row_number()==length(timer.min)]) - (timer.min[row_number()==1]),
                average_mph = (1 / (as.numeric(pace_minutes)/60)),
@@ -67,7 +90,7 @@ by_mile <- function(df) {
 #'
 #' by_kilometer summarizes all rides data information into a tidy per kilometer summary tibble
 #'
-#' @param df rides tibble
+#' @param data rides tibble
 #'
 #' @return tibble of summarized rides
 #' @export
@@ -75,9 +98,10 @@ by_mile <- function(df) {
 #' @examples
 #' ## No Run
 #' by_kilometer(rides)
-by_kilometer <- function(df) {
-    df$kilometer <- floor(as.numeric(as.character(df$distance.km)))
-    df %>%
+by_kilometer <- function(data) {
+    if(!'rides_df'%in%class(data)) return('Must use a rides_df produced via read_rides')
+    data$kilometer <- floor(as.numeric(as.character(data$distance.km)))
+    data %>%
         group_by(ride, kilometer) %>%
         mutate(pace_minutes = as.numeric(timer.min[row_number()==length(timer.min)]) - as.numeric(timer.min[row_number()==1]),
                average_kph = (1 / (as.numeric(pace_minutes)/60)),
@@ -105,7 +129,7 @@ by_kilometer <- function(df) {
 #'
 #' ride_summary provides overall summaries of rides
 #'
-#' @param df rides tibble
+#' @param data rides tibble
 #' @param unit either 'imperial' or 'metric'
 #'
 #' @return tibble
@@ -114,9 +138,10 @@ by_kilometer <- function(df) {
 #' @examples
 #' ## No run
 #' # ride_summary(rides, 'metric')
-ride_summary <- function(df, unit = 'metric') {
-  if(unit == 'metric') {
-    df %>%
+ride_summary <- function(data, unit = 'metric') {
+    if(!'rides_df'%in%class(data)) return('Must use a rides_df produced via read_rides')
+    if(unit == 'metric') {
+    data %>%
         group_by(ride) %>%
         mutate(next_distance = lag(distance.km),
                is_active = ifelse(distance.km == next_distance, 0, 1),
@@ -162,7 +187,7 @@ ride_summary <- function(df, unit = 'metric') {
                min_kph, max_kph, avg_kph, avg_accent_pace, avg_descent_pace,
                avg_accent_kph, avg_descent_kph)
   } else if(unit == 'imperial') {
-    df %>%
+    data %>%
         group_by(ride) %>%
         mutate(next_distance = lag(distance.km),
                is_active = ifelse(distance.km == next_distance, 0, 1),
